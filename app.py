@@ -4,8 +4,6 @@ import json
 from datetime import datetime
 
 FILENAME = "expenses.json"
-
-# Load expenses into DataFrame
 def load_expenses():
     try:
         with open(FILENAME, "r") as f:
@@ -14,11 +12,9 @@ def load_expenses():
     except FileNotFoundError:
         return pd.DataFrame(columns=["amount", "category", "note", "date"])
 
-# Save DataFrame to JSON
 def save_expenses(df):
     df.to_json(FILENAME, orient="records", indent=4)
 
-# UI App
 def main():
     st.set_page_config(page_title="Expense Tracker", layout="centered")
     st.title("Expense Tracker App")
@@ -65,13 +61,12 @@ def main():
            st.info("No expenses to delete.")
         else:
            df_display = df.copy()
-           df_display.index = df_display.index + 1  # Display index starting from 1
+           df_display.index = df_display.index + 1  
            selected = st.selectbox("Select expense to delete (by index)", df_display.index)
            
-           st.write(df_display.loc[selected])  # Show selected row
+           st.write(df_display.loc[selected]) 
 
            if st.button("Delete"):
-            # Drop using actual index (selected - 1)
                df = df.drop(index=selected - 1).reset_index(drop=True)
                save_expenses(df)
                st.success("✅ Expense deleted.")
